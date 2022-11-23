@@ -1,12 +1,13 @@
 import json
+import tempfile
 import urllib.parse
+
 import boto3
 from package.PIL import Image, ImageOps
-import tempfile
-
-s3 = boto3.client("s3")
 
 TARGET_S3_BUCKET = "lambda-data-out--apparently-holy-toucan"
+
+s3 = boto3.client("s3")
 
 
 def upload_file(source, key):
@@ -33,8 +34,8 @@ def invert_image(filepath):
 
 def handler(event, context):
     bucket, key = get_bucket_and_key(event)
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tempfile_path = f"{tmpdir}/{key}"
+    with tempfile.TemporaryDirectory() as tempdir:
+        tempfile_path = f"{tempdir}/{key}"
         download_file(bucket, key, tempfile_path)
         invert_image(tempfile_path)
         upload_file(tempfile_path, key)
