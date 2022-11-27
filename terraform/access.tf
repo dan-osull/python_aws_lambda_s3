@@ -80,7 +80,6 @@ resource "aws_s3_bucket_notification" "lambda_trigger" {
   lambda_function {
     lambda_function_arn = aws_lambda_function.process_image.arn
     events              = ["s3:ObjectCreated:*"]
-
   }
 }
 
